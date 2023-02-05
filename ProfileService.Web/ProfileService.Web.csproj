@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include ="ProfileService.Web.Tests"/>
+        <InternalsVisibleTo Include="ProfileService.Web.Tests" />
     </ItemGroup>
 
 </Project>
