@@ -30,4 +30,8 @@ public class InMemoryProfileStoreTests
     // TODO:
     // Add additional tests for invalid arguments (username, firstname and lastname are all mandatory fields)
     // Fix the implementation of the InMemoryProfileStore if necessary to validate the arguments being passed
+    
+    
+    //It is not possible to pass invalid arguments to UpsertProfile since it expects a Profile, and all properties of Profile are String
+    //Similarly impossible to pass invalid argument to GetProfile which expects a String username
 }
