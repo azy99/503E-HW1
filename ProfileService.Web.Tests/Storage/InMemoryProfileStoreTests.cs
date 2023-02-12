@@ -10,7 +10,7 @@ public class InMemoryProfileStoreTests
     [Fact]
     public async Task AddNewProfile()
     {
-        var profile = new Profile(username: "foobar", firstName: "Foo", lastName: "Bar");
+        var profile = new Profile("foobar", "Foo",  "Bar");
         await _store.UpsertProfile(profile);
         Assert.Equal(profile, await _store.GetProfile(profile.Username));
     }
@@ -18,7 +18,7 @@ public class InMemoryProfileStoreTests
     [Fact]
     public async Task UpdateExistingProfile()
     {
-        var profile = new Profile(username: "foobar", firstName: "Foo", lastName: "Bar");
+        var profile = new Profile( "foobar",  "Foo",  "Bar");
         await _store.UpsertProfile(profile);
 
         var updatedProfile = profile with { FirstName = "Foo1", LastName = "Foo2" };
@@ -26,12 +26,24 @@ public class InMemoryProfileStoreTests
         
         Assert.Equal(updatedProfile, await _store.GetProfile(profile.Username));
     }
-    
-    // TODO:
-    // Add additional tests for invalid arguments (username, firstname and lastname are all mandatory fields)
-    // Fix the implementation of the InMemoryProfileStore if necessary to validate the arguments being passed
-    
-    
-    //It is not possible to pass invalid arguments to UpsertProfile since it expects a Profile, and all properties of Profile are String
-    //Similarly impossible to pass invalid argument to GetProfile which expects a String username
+
+    [Theory]
+    [InlineData(null, "Foo", "Bar")]
+    [InlineData("", "Foo", "Bar")]
+    [InlineData(" ", "Foo", "Bar")]
+    [InlineData("foobar", null, "Bar")]
+    [InlineData("foobar", "", "Bar")]
+    [InlineData("foobar", "  ", "Bar")]
+    [InlineData("foobar", "Foo", null)]
+    [InlineData("foobar", "Foo", "")]
+    [InlineData("foobar", "Foo", "  ")]
+
+    public async Task UpsertProfile_InvalidArgs(string username, string firstName, string lastName)
+    {
+        await Assert.ThrowsAsync<ArgumentException>(async () =>
+        {
+            await _store.UpsertProfile(new Profile(username, firstName, lastName));
+        });
+    }
+   
 }
