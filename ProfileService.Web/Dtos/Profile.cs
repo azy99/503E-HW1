@@ -1,15 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ProfileService.Web.Dtos;
 
-public record Profile
-{
-    public Profile(string username, string firstName, string lastName)
-    {
-        Username = username;
-        FirstName = firstName;
-        LastName = lastName;
-    }
+public record Profile(
+    [Required] string Username,
+    [Required] string FirstName,
+    [Required] string LastName
+);
 
-    public string Username { get; init; }
-    public string FirstName { get; init; }
-    public string LastName { get; init; }
-}
